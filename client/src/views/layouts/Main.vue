@@ -19,8 +19,9 @@
 </script>
 
 <style lang="scss">
-    $primary-color: color() !default;
-    $secondary-color: color(255, 255, 255) !default;
+    $primary-color: color('red', 'darken-1') !default;
+    $secondary-color: color('pink', 'darken-1');
+    $background-color: color(255, 255, 255) !default;
 
     [v-cloak] {
         display: none;
