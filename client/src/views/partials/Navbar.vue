@@ -48,6 +48,7 @@
         align-items: center;
         flex-wrap: nowrap;
         font-size: 1.4rem;
+        user-select: none;
 
         img {
             width: 3rem;
