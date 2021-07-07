@@ -9,64 +9,124 @@
         </keep-alive>
 
         <h5>List of tasks</h5>
-        <div class="tasks-list" v-if="tasks.length > 0">
-            <div class="col s12" :key="task.title" v-for="(task) in tasks">
-                <div class="card">
-                    <div class="card-content">
-                        <label>
-                            <input type="checkbox" class="filled-in" v-model="task.completed" />
-                            <span>
-                                <p v-if="!task.completed" class="task-title">{{ task.title }}</p>
-                                <p v-else class="crossed-title task-title">{{ task.title }}</p>
-                                <p class="task-date">Created: {{ getFormatedDate(task.createdAt) }} (Modified: {{ getFormatedDate(task.modifiedAt) }})</p>
-                            </span>
-                        </label>
-                        <i class="right material-icons task-option" style="color: red">close</i>
-                        <i class="right material-icons task-option">edit</i>
+        <div v-if="!loader">
+            <div class="tasks-list" v-if="tasks.length > 0">
+                <div :key="task._id" v-for="(task, index) in tasks">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row fixed-row">
+                                <div class="col s10">
+                                    <label>
+                                        <input @change="completeTask(index)" type="checkbox" class="filled-in" v-model="task.completed" />
+                                        <span>
+                                            <p v-if="!task.completed" class="task-title">{{ task.title }}</p>
+                                            <p v-else class="crossed-title task-title">{{ task.title }}</p>
+                                            <p class="task-date">Created: {{ getFormatedDate(task.createdAt) }} 
+                                                (Modified: {{ getFormatedDate(task.modifiedAt) }})</p>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="col s2">
+                                    <i class="right material-icons task-option" style="color: red; cursor: pointer;" @click="deleteTask(index)">close</i>
+                                    <i class="right material-icons task-option" style="cursor: pointer;">edit</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p v-else>Nothing to see here</p>
+        </div>
+        <div class="loader row" v-else>
+            <div class="preloader-wrapper active">
+                <div class="spinner-layer spinner-red-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
                     </div>
                 </div>
-
             </div>
         </div>
-        <p v-else>Nothing to see here</p>
         
     </div>
 </template>
 
 <script>
+    import PostService from '../PostService'
     import AddForm from "./partials/AddForm.vue"
 
     export default {
         components: { AddForm },
         data: () => ({
+            loader: true,
             component: 'AddForm',
             tasks: []
         }),
+        async created () {
+            try {
+                this.tasks = await PostService.getTasks()
+                this.loader = false
+            } catch (err) { console.error(err) }
+        },
         methods: {
-            addTask (title) {
-                this.tasks.push({
+            async addTask(title) {
+                const temp = {
                     title, 
                     completed: false,
                     createdAt: new Date(),
                     modifiedAt: new Date()
-                });
+                }
+                try {
+                    await PostService.addTask(temp)
+                    this.tasks.push(temp);
+                } catch (err) { console.error(err) }
+            },
+
+            async deleteTask(id) {
+                try {
+                    await PostService.deleteTask(this.tasks[id]._id)
+                    this.tasks.splice(id, 1);
+                } catch(err) { console.error(err) }
+            },
+
+            async completeTask(id) {
+                try {
+                    this.tasks[id].modifiedAt = new Date()
+                    await PostService.changeTask(this.tasks[id])
+                } catch (err) { console.error(err) }
             },
 
             getFormatedDate(date) {
+                const temp = new Date(date)
                 return new Intl.DateTimeFormat('en-US', {
-                    weekday: 'long',
+                    // weekday: 'long',
                     year: 'numeric', month: '2-digit', day: '2-digit',
                     hour: '2-digit', minute: '2-digit', hour12: false,
-                }).format(date);
+                }).format(temp);
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    .loader {
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+    }
+
+    .fixed-row {
+        margin: 0;
+    }
+
     .task-title {
         color: rgb(0, 0, 0);
         font-size: 1.5rem;
+        padding-bottom: 0.2rem;
     }
 
     .task-title.crossed-title {
@@ -79,8 +139,8 @@
     }
 
     .task-date {
-        margin-top: 0.3rem;
         font-size: 0.8rem;
+        line-height: 1.2rem;
     }
 
     .tasks-list {
