@@ -12,55 +12,28 @@
         <div v-if="!loader">
             <div class="tasks-list" v-if="tasks.length > 0">
                 <div :key="task._id" v-for="(task, index) in tasks">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row fixed-row">
-                                <div class="col s10">
-                                    <label>
-                                        <input @change="completeTask(index)" type="checkbox" class="filled-in" v-model="task.completed" />
-                                        <span>
-                                            <p v-if="!task.completed" class="task-title">{{ task.title }}</p>
-                                            <p v-else class="crossed-title task-title">{{ task.title }}</p>
-                                            <p class="task-date">Created: {{ getFormatedDate(task.createdAt) }} 
-                                                (Modified: {{ getFormatedDate(task.modifiedAt) }})</p>
-                                        </span>
-                                    </label>
-                                </div>
-                                <div class="col s2">
-                                    <i class="right material-icons task-option" style="color: red; cursor: pointer;" @click="deleteTask(index)">close</i>
-                                    <i class="right material-icons task-option" style="cursor: pointer;">edit</i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <app-task 
+                        :title="task.title" 
+                        :completed="task.completed"
+                        :createdAt="new Date(task.createdAt)"
+                        :modifiedAt="new Date(task.modifiedAt)"
+                        @task-completed="completeTask(index)"
+                        @task-delete="deleteTask(index)" />
                 </div>
             </div>
             <p v-else>Nothing to see here</p>
         </div>
-        <div class="loader row" v-else>
-            <div class="preloader-wrapper active">
-                <div class="spinner-layer spinner-red-only">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                        <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+        <app-loader class="loader row" v-else/>
     </div>
 </template>
 
 <script>
     import PostService from '../PostService'
     import AddForm from "./partials/AddForm.vue"
+    import Task from './partials/Task.vue'
 
     export default {
-        components: { AddForm },
+        components: { 'app-task': Task, AddForm },
         data: () => ({
             loader: true,
             component: 'AddForm',
@@ -96,17 +69,9 @@
             async completeTask(id) {
                 try {
                     this.tasks[id].modifiedAt = new Date()
+                    this.tasks[id].completed = !this.tasks[id].completed
                     await PostService.changeTask(this.tasks[id])
                 } catch (err) { console.error(err) }
-            },
-
-            getFormatedDate(date) {
-                const temp = new Date(date)
-                return new Intl.DateTimeFormat('en-US', {
-                    // weekday: 'long',
-                    year: 'numeric', month: '2-digit', day: '2-digit',
-                    hour: '2-digit', minute: '2-digit', hour12: false,
-                }).format(temp);
             }
         }
     }
@@ -119,35 +84,7 @@
         margin-top: 5rem;
     }
 
-    .fixed-row {
-        margin: 0;
-    }
-
-    .task-title {
-        color: rgb(0, 0, 0);
-        font-size: 1.5rem;
-        padding-bottom: 0.2rem;
-    }
-
-    .task-title.crossed-title {
-        text-decoration: line-through;
-        color : grey;
-    }
-
-    .task-option {
-        user-select: none;
-    }
-
-    .task-date {
-        font-size: 0.8rem;
-        line-height: 1.2rem;
-    }
-
     .tasks-list {
         margin: 1.3rem 0;
-    }
-
-    .add-button {
-        margin-top: .2rem;
     }
 </style>
