@@ -47,12 +47,7 @@
         },
         methods: {
             async addTask(title) {
-                const temp = {
-                    title, 
-                    completed: false,
-                    createdAt: new Date(),
-                    modifiedAt: new Date()
-                }
+                const temp = { title, completed: false, createdAt: new Date(), modifiedAt: new Date() }
                 try {
                     await PostService.addTask(temp)
                     this.tasks.push(temp);

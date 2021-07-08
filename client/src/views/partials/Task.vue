@@ -8,8 +8,7 @@
                             <input @change="$emit('task-completed')" type="checkbox"
                                 class="filled-in" :checked="completed"/>
                             <span>
-                                <p v-if="!completed" class="task-title">{{ title }}</p>
-                                <p v-else class="crossed-title task-title">{{ title }}</p>
+                                <p class="task-title" :class="isCheckedStyle">{{ title }}</p>
                                 <p class="task-date">Created: {{ getFormatedDate(createdAt) }} 
                                     (Modified: {{ getFormatedDate(modifiedAt) }})</p>
                             </span>
@@ -36,6 +35,11 @@
             completed: {type: Boolean, required: true },
             createdAt: {type: Date, required: true},
             modifiedAt: {type: Date, required: true}
+        },
+        computed: {
+            isCheckedStyle() {
+                return this.completed ? 'crossed-title' : ''
+            }
         },
         methods: {
             getFormatedDate(date) {

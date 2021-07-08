@@ -4,6 +4,6 @@ import About from './views/About.vue'
 
 export default createRouter({
     history: createWebHistory(),
-    routes: [{ path: '/', component: Index },
-    { path: '/about', component: About }]
+    routes: [{ path: '/', component: Index, meta: {layout: 'main'} },
+    { path: '/about', component: About, meta: {layout: 'main'} }]
 })
