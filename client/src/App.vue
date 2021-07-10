@@ -9,6 +9,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import Main from "./views/layouts/Main.vue";
 import Empty from "./views/layouts/Empty.vue";
+import Auth from "./views/layouts/Auth.vue";
 
 export default {
   data: () => ({
@@ -17,6 +18,7 @@ export default {
   components: {
     "main-layout": Main,
     "empty-layout": Empty,
+    "auth-layout": Auth
   },
 };
 </script>
