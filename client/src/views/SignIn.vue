@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <h4>Sign In</h4>
-      <h6><router-link to="/registration">/ Sign Up</router-link></h6>
+      <h6><router-link to="/signup">/ Sign Up</router-link></h6>
     </div>
     <div class="row">
       <form method="POST" @submit.prevent>
