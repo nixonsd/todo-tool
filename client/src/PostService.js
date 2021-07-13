@@ -2,6 +2,8 @@ import axios from "axios";
 
 const url = "http://localhost:3000/api/tasks/";
 
+axios.defaults.withCredentials = true;
+
 class PostService {
   /**
    * Get tasks
@@ -9,8 +11,10 @@ class PostService {
    */
   static async getTasks() {
     try {
-      const res = await axios.get(url);
-      const data = res.data;
+      const response = await axios
+        .get(url)
+        .catch((err) => console.log(err.message));
+      const data = response.data;
       data.map((post) => ({
         ...post,
         createdAt: new Date(post.createdAt),
@@ -18,7 +22,7 @@ class PostService {
       }));
       return data;
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   }
 
@@ -27,9 +31,10 @@ class PostService {
    * @param {title: String, createdAt: Date, modifiedAt: Date} object
    */
   static async addTask(object) {
-    await axios.post(url, object).catch((err) => {
-      console.log(err);
+    const response = await axios.post(url, object).catch((err) => {
+      console.log(err.message);
     });
+    return response.data;
   }
 
   /**
@@ -38,7 +43,7 @@ class PostService {
    */
   static async deleteTask(id) {
     await axios.delete(`${url}${id}`).catch((err) => {
-      console.log(err);
+      console.log(err.message);
     });
   }
 
@@ -48,7 +53,7 @@ class PostService {
    */
   static async changeTask(object) {
     await axios.put(url, object).catch((err) => {
-      console.log(err);
+      console.log(err.message);
     });
   }
 }

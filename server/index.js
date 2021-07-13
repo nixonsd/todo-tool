@@ -1,8 +1,15 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
 const path = require("path");
+const helmet = require("helmet");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
+const varMiddleware = require("./middleware/variables");
+const userMiddleware = require("./middleware/user");
 const keys = require("./keys");
 
 /// Models
@@ -10,24 +17,41 @@ const User = require("./models/user");
 
 /// Express Initializing
 const app = express();
+const store = new MongoStore({
+  collection: "sessions",
+  uri: keys.MONGODB_URI,
+});
 app.use(express.urlencoded({ extended: true }));
 
 /// Middlewares
 app.use(bodyParser.json());
-app.use(cors());
-app.use(async (req, res, next) => {
-  try {
-    const user = await User.findById("60e5cf04095b6c03ec022dd7");
-    req.user = user;
-    next();
-  } catch (err) {
-    console.log(err);
-  }
-});
+app.use(cookieParser());
+
+app.use(
+  session({
+    secret: keys.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store,
+  })
+);
+
+app.use(
+  cors({
+    origin: ["http://localhost:8081", "https://localhost:8081"],
+    credentials: true
+  })
+);
+
+app.use(helmet());
+app.use(varMiddleware);
+app.use(userMiddleware);
 
 /// Routes
 const tasks = require("./routes/api/tasks");
+const auth = require("./routes/api/auth");
 app.use("/api/tasks", tasks);
+app.use("/api/auth", auth);
 
 /**
  * Main loop
@@ -37,21 +61,8 @@ async function start_application() {
     await mongoose.connect(keys.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: true,
     });
-
-    const candidate = await User.findOne();
-    if (!candidate) {
-      const user = new User({
-        email: "bandanovvs@gmail.com",
-        name: "Bogdan",
-        password: "123456",
-        avatarUrl:
-          "https://avatars.githubusercontent.com/u/65295972?s=400&u=5086e0c4347484c9cfb8e5bad720948079e61d4c&v=4",
-        tasks: [],
-      });
-
-      await user.save();
-    }
 
     app.listen(keys.PORT, () => {
       console.log(`Server is running on port ${keys.PORT}`);

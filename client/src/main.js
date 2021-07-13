@@ -20,9 +20,9 @@ app.component("app-navbar", navbar);
 
 /// Mixins
 app.mixin({
-  created() {
+  mounted() {
     M.updateTextFields();
-  }
+  },
 });
 
 app.mount("#app");

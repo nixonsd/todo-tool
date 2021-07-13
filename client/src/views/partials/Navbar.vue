@@ -18,6 +18,9 @@
               ><i class="small material-icons left">insert_link</i>GitHub</a
             >
           </li>
+          <li>
+            <a class="sidenav-close" href="/" @click.prevent="logout">Logout</a>
+          </li>
         </ul>
       </div>
 
@@ -27,6 +30,9 @@
         <li><router-link class="sidenav-close" to="/">Home</router-link></li>
         <li>
           <router-link class="sidenav-close" to="/about">About</router-link>
+        </li>
+        <li>
+          <a class="sidenav-close" href="#" @click.prevent="logout">Logout</a>
         </li>
         <li><div class="divider"></div></li>
         <li><a class="subheader">Links</a></li>
@@ -41,11 +47,23 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import M from "materialize-css";
 export default {
+  data: () => ({
+    store: useStore(),
+    router: useRouter(),
+  }),
   mounted: () => {
     var elems = document.querySelectorAll(".sidenav");
     M.Sidenav.init(elems);
+  },
+  methods: {
+    async logout() {
+      await this.store.dispatch("auth/logout");
+      this.router.push("/login");
+    },
   },
 };
 </script>

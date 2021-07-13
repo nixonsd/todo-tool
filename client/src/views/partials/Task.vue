@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-content">
         <div class="row fixed-row">
-          <div class="col s10">
+          <div class="col s10" style="white-space: pre-wrap;">
             <label>
               <input
                 @change="$emit('task-completed')"
@@ -72,6 +72,7 @@ export default {
   color: rgb(0, 0, 0);
   font-size: 1.5rem;
   padding-bottom: 0.2rem;
+  overflow-wrap: anywhere;
 }
 
 .task-title.crossed-title {

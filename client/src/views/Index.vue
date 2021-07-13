@@ -10,7 +10,7 @@
 
     <h5>List of tasks</h5>
     <div v-if="!loader">
-      <div class="tasks-list" v-if="tasks.length > 0">
+      <div class="tasks-list" v-if="tasks && tasks.length > 0">
         <div :key="task._id" v-for="(task, index) in tasks">
           <app-task
             :title="task.title"
@@ -45,7 +45,7 @@ export default {
       this.tasks = await PostService.getTasks();
       this.loader = false;
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   },
   methods: {
@@ -56,11 +56,12 @@ export default {
         createdAt: new Date(),
         modifiedAt: new Date(),
       };
+
       try {
-        await PostService.addTask(temp);
-        this.tasks.push(temp);
+        const task = await PostService.addTask(temp);
+        this.tasks.push(task);
       } catch (err) {
-        console.error(err);
+        console.log(err.message);
       }
     },
 
