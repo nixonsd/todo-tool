@@ -1,18 +1,28 @@
-import { createApp } from 'vue'
-import App from './views/layouts/Main.vue'
-import router from './router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
 
 import "materialize-css";
-import 'materialize-css/dist/css/materialize.min.css'
-import 'material-design-icons/iconfont/material-icons.css'
+import "materialize-css/dist/css/materialize.min.css";
+import "material-design-icons/iconfont/material-icons.css";
 
-const app = createApp(App)
-app.use(router)
+const app = createApp(App);
+app.use(router);
+app.use(store);
 
 /// Components
-import loader from './views/partials/Loader'
-import navbar from './views/partials/Navbar'
-app.component('app-loader', loader)
-app.component('app-navbar', navbar)
+import M from "materialize-css";
+import loader from "./views/partials/Loader";
+import navbar from "./views/partials/Navbar";
+app.component("app-loader", loader);
+app.component("app-navbar", navbar);
 
-app.mount('#app')
+/// Mixins
+app.mixin({
+  mounted() {
+    M.updateTextFields();
+  },
+});
+
+app.mount("#app");

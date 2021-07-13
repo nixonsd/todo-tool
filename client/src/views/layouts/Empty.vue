@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>About Page</h1>
+    <div class="red darken-1">
+      <router-view />
+    </div>
   </div>
 </template>
 
