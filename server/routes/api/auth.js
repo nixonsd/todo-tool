@@ -79,16 +79,31 @@ router.post("/logout", async (req, res) => {
  */
 router.post("/register", async (req, res) => {
   try {
-    const { email, password, name } = req.body;
-    const hashPassword = await bcrypt.hash(password, 10);
-    const user = new User({
-      name,
-      email,
-      password: hashPassword,
-    });
-    user.save();
+    let data = {
+      id: "auth_failed",
+      status: 403,
+      message: "This email is already in use",
+    };
 
-    
+    const { email, password, name } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      const hashPassword = await bcrypt.hash(password, 10);
+      const user = new User({
+        name,
+        email,
+        password: hashPassword,
+      });
+      user.save();
+      data.id = "auth_succeed";
+      data.status = 201;
+      data.message = "OK";
+    }
+
+    res
+      .status(data.status)
+      .send(JSON.stringify({ id: data.id, message: data.message }));
   } catch (e) {
     console.log(e);
   }

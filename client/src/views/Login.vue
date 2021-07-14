@@ -4,6 +4,11 @@
       <h4>Sign In</h4>
       <h6><router-link to="/register">/ Sign Up</router-link></h6>
     </div>
+    <component
+      :is="ErrorProp"
+      :title="error.message"
+      v-if="error.id !== 'auth_succeed'"
+    />
     <div class="row">
       <form method="POST" @submit.prevent="onSubmit" novalidate>
         <div class="input-field">
@@ -60,6 +65,11 @@
           </div>
         </div>
       </form>
+      <!-- <div class="row">
+        <div class="col s12 wrapper">
+          <span>Or Sign In with</span>
+        </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -69,9 +79,15 @@ import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import Error from "./partials/Error.vue";
 
 export default {
+  components: { Error },
   setup() {
+    // Variables
+    const ErrorProp = "Error";
+    const error = { id: "auth_succeed", message: "OK" };
+
     // Initial values
     const formValues = {
       email: "",
@@ -109,7 +125,14 @@ export default {
     const { value: remember } = useField("remember", yup.boolean());
 
     const onSubmit = handleSubmit(async (values) => {
-      await store.dispatch("auth/login", values);
+      const response = await store.dispatch("auth/login", values);
+      const { status, data } = response;
+      if (status !== 200) {
+        const { id, message } = data;
+        error.id = id;
+        error.message = message;
+        return;
+      }
       router.push("/");
     });
 
@@ -123,6 +146,8 @@ export default {
       pBlur,
       onSubmit,
       isSubmitting,
+      error,
+      ErrorProp,
     };
   },
 };
@@ -131,5 +156,21 @@ export default {
 <style lang="scss" scoped>
 .btn-space {
   margin-right: 0.7rem;
+}
+
+.wrapper {
+  background-color: gray;
+  height: 1px;
+  margin: 32px 0 0;
+  text-align: center;
+
+  span {
+    position: relative;
+    padding: 0 2rem;
+    top: -0.9rem;
+    font-size: 1.1rem;
+    color: gray;
+    background: #ffffff;
+  }
 }
 </style>

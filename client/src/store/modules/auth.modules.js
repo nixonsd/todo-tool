@@ -10,21 +10,21 @@ export default {
   actions: {
     async login(_, payload) {
       try {
-        await AuthService.login(payload);
+        return await AuthService.login(payload);
       } catch (err) {
         console.log(err.message);
       }
     },
     async logout() {
       try {
-        await AuthService.logout();
+        return await AuthService.logout();
       } catch (err) {
         console.log(err.message);
       }
     },
     async register(_, payload) {
       try {
-        await AuthService.register(payload);
+        return await AuthService.register(payload);
       } catch (err) {
         console.log(err.message);
       }

@@ -31,6 +31,7 @@ export default {};
   position: absolute;
   width: 100%;
   height: 100%;
+  padding: 1rem 0;
 
   /* FlexBox */
   display: flex;

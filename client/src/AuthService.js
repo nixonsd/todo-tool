@@ -13,13 +13,13 @@ class AuthService {
         password,
         remember,
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => err.response);
   }
 
   static async logout() {
     return await axios
       .post(`${url}logout`)
-      .catch((err) => console.log(err.message));
+      .catch((err) => err.response);
   }
 
   static async register(object) {
@@ -30,7 +30,7 @@ class AuthService {
         email,
         password,
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => err.response);
   }
 }
 
