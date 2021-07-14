@@ -7,6 +7,11 @@ const router = Router();
 
 const AUTH_TOKEN_KEY = "sid";
 
+/**
+ * Login API Method api/auth/login
+ * * req.body {email: String, password: String, remember: Boolean}
+ * @param req.body An object that consists of authorization data
+ */
 router.post("/login", async (req, res) => {
   try {
     let data = {
@@ -53,6 +58,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+/**
+ * Logout API Method api/auth/logout
+ */
 router.post("/logout", async (req, res) => {
   try {
     req.session.destroy((err) => {
@@ -64,8 +72,23 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+/**
+ * Register API Method api/auth/register
+ * * req.body {name: String, email: String, password: String}
+ * @param req.body An object that consists of authorization data
+ */
 router.post("/register", async (req, res) => {
   try {
+    const { email, password, name } = req.body;
+    const hashPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      password: hashPassword,
+    });
+    user.save();
+
+    
   } catch (e) {
     console.log(e);
   }

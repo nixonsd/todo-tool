@@ -22,6 +22,13 @@ export default {
         console.log(err.message);
       }
     },
+    async register(_, payload) {
+      try {
+        await AuthService.register(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {
     token: (state) => state.token,

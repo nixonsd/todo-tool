@@ -11,7 +11,7 @@ class AuthService {
       .post(`${url}login`, {
         email,
         password,
-        remember
+        remember,
       })
       .catch((err) => console.log(err.message));
   }
@@ -19,6 +19,17 @@ class AuthService {
   static async logout() {
     return await axios
       .post(`${url}logout`)
+      .catch((err) => console.log(err.message));
+  }
+
+  static async register(object) {
+    const { name, email, password } = object;
+    return await axios
+      .post(`${url}register`, {
+        name,
+        email,
+        password,
+      })
       .catch((err) => console.log(err.message));
   }
 }

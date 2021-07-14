@@ -5,51 +5,73 @@
       <h6><router-link to="/login">/ Sign In</router-link></h6>
     </div>
     <div class="row">
-      <form method="POST" @submit.prevent>
+      <form method="POST" @submit.prevent="onSubmit" novalidate>
         <div class="input-field">
           <input
             placeholder="Write first name..."
-            id="first_name"
+            :class="{ invalid: nError }"
+            id="name"
             type="text"
-            class="validate"
+            name="name"
+            v-model="name"
+            @blur="nBlur"
           />
-          <label for="first_name">First Name</label>
+          <label for="name">First Name</label>
+          <span v-if="nError" class="helper-text" :data-error="nError"></span>
         </div>
 
         <div class="input-field">
           <input
             placeholder="Write email..."
+            :class="{ invalid: eError }"
             id="email"
             type="email"
-            class="validate"
+            name="email"
+            v-model="email"
+            @blur="eBlur"
           />
           <label for="email">Email</label>
+          <span v-if="eError" class="helper-text" :data-error="eError"></span>
         </div>
 
         <div class="input-field">
           <input
             placeholder="Write password..."
+            :class="{ invalid: pError }"
             id="password"
             type="password"
-            class="validate"
+            name="password"
+            v-model="password"
+            @blur="pBlur"
           />
           <label for="password">Password</label>
+          <span v-if="pError" class="helper-text" :data-error="pError"></span>
         </div>
 
         <div class="input-field">
           <input
             placeholder="Repeat password..."
-            id="repeat_password"
+            :class="{ invalid: pcError }"
+            id="passwordConfirmation"
             type="password"
-            class="validate"
+            name="passwordConfirmation"
+            v-model="passwordConfirmation"
+            @blur="pcBlur"
           />
-          <label for="repeat_password">Repeat Password</label>
+          <label for="passwordConfirmation">Repeat Password</label>
+          <span v-if="pcError" class="helper-text" :data-error="pcError"></span>
         </div>
 
         <div class="row">
-          <button class="btn waves-effect waves-light btn-space col s12" type="submit">
-            Sign Up
-          </button>
+          <div class="col s12">
+            <button
+              class="btn waves-effect waves-light btn-space col s12"
+              type="submit"
+              :disabled="isSubmitting"
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -57,7 +79,103 @@
 </template>
 
 <script>
-export default {};
+import * as yup from "yup";
+import { useField, useForm } from "vee-validate";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+
+export default {
+  setup() {
+    // Initial values
+    const formValues = {
+      name: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    };
+
+    const store = useStore();
+    const router = useRouter();
+
+    const { handleSubmit, isSubmitting } = useForm({
+      initialValues: formValues,
+    });
+
+    const { value: name, errorMessage: nError, handleBlur: nBlur } = useField(
+      "name",
+      yup
+        .string()
+        .trim()
+        .required("Field is required")
+    );
+
+    const { value: email, errorMessage: eError, handleBlur: eBlur } = useField(
+      "email",
+      yup
+        .string()
+        .trim()
+        .required("Field is required")
+        .email("Invalid email address")
+    );
+
+    const {
+      value: password,
+      errorMessage: pError,
+      handleBlur: pBlur,
+    } = useField(
+      "password",
+      yup
+        .string()
+        .trim()
+        .required("Field is required")
+        .min(6, "Password must have 6 characters at least")
+    );
+
+    const {
+      value: passwordConfirmation,
+      errorMessage: pcError,
+      handleBlur: pcBlur,
+    } = useField(
+      "passwordConfirmation",
+      yup
+        .string()
+        .trim()
+        .required("This field is required")
+        .min(6, "Password must have 6 characters at least")
+        .test("passwords-match", "Passwords must match", value => {
+          return password.value === value;
+        })
+    );
+
+    const onSubmit = handleSubmit(async (values) => {
+      await store.dispatch("auth/register", values);
+      router.push("/");
+    });
+
+    return {
+      name,
+      nError,
+      nBlur,
+      email,
+      eError,
+      eBlur,
+      password,
+      pError,
+      pBlur,
+      passwordConfirmation,
+      pcError,
+      pcBlur,
+      onSubmit,
+      isSubmitting,
+    };
+  },
+  // methods: {
+  //   async submitHandler() {
+  //     await this.store.dispatch("auth/register", this.values);
+  //     this.router.push("/");
+  //   },
+  // },
+};
 </script>
 
 <style lang="scss" scoped>
