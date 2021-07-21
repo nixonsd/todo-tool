@@ -70,7 +70,7 @@
         <div class="row">
           <div class="col s12">
             <button
-              class="btn waves-effect waves-light btn-space col s12"
+              class="btn waves-effect waves-light btn-space col s6 m4"
               type="submit"
               :disabled="isSubmitting"
             >

@@ -61,13 +61,16 @@
             >
               Sign In
             </button>
-            <router-link to="/">Forgot password?</router-link>
+            <router-link to="/restore">Forgot password?</router-link>
           </div>
         </div>
       </form>
       <!-- <div class="row">
         <div class="col s12 wrapper">
           <span>Or Sign In with</span>
+        </div>
+        <div class="col s12">
+          
         </div>
       </div> -->
     </div>

@@ -4,6 +4,7 @@ import Index from "./views/Index.vue";
 import About from "./views/About.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
+import Restore from "./views/Restore.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,6 +12,7 @@ const router = createRouter({
     { path: "/", component: Index, meta: { layout: "main", auth: true } },
     { path: "/about", component: About, meta: { layout: "main", auth: true } },
     { path: "/login", component: Login, meta: { layout: "auth", auth: false } },
+    { path: "/restore", component: Restore, meta: { layout: "auth", auth: false } },
     {
       path: "/register",
       component: Register,
