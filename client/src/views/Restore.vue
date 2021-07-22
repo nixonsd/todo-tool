@@ -4,11 +4,6 @@
       <h4>Restore password</h4>
       <h6><router-link to="/login">/ Sign In</router-link></h6>
     </div>
-    <component
-      :is="ErrorProp"
-      :title="error.message"
-      v-if="error.id !== 'auth_succeed'"
-    />
     <div class="row">
       <form method="POST" @submit.prevent="onSubmit" novalidate>
         <div class="input-field">
@@ -36,6 +31,18 @@
           </div>
         </div>
       </form>
+      <component
+        class="red-text"
+        :is="ErrorProp"
+        :title="error.message"
+        v-if="error.id === 'restore_failed'"
+      />
+      <component
+        class="green-text"
+        :is="ErrorProp"
+        :title="error.message"
+        v-else-if="error.id === 'restore_succeed'"
+      />
     </div>
   </div>
 </template>
@@ -43,15 +50,18 @@
 <script>
 import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
-// import { useStore } from "vuex";
+import { useStore } from "vuex";
 // import { useRouter } from "vue-router";
-import Error from "./partials/Error.vue";
+import Alert from "./partials/Alert.vue";
 export default {
-  components: { Error },
+  components: { Alert },
   setup() {
     // Variables
-    const ErrorProp = "Error";
-    const error = { id: "auth_succeed", message: "OK" };
+    const ErrorProp = "Alert";
+    let error = { id: null, message: null };
+
+    const store = useStore();
+    // const router = useRouter();
 
     // Initial values
     const formValues = {
@@ -70,6 +80,14 @@ export default {
         .email("Invalid email address")
     );
 
+    const onSubmit = handleSubmit(async (values) => {
+      const response = await store.dispatch("auth/restoreRequest", values);
+      const { data } = response;
+      const { id, message } = data;
+      error.id = id;
+      error.message = message;
+    });
+
     return {
       email,
       eError,
@@ -77,6 +95,7 @@ export default {
       error,
       handleSubmit,
       isSubmitting,
+      onSubmit,
       ErrorProp,
     };
   },

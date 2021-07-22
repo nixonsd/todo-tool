@@ -29,6 +29,13 @@ export default {
         console.log(err.message);
       }
     },
+    async restoreRequest(_, payload) {
+      try {
+        return await AuthService.restoreRequest(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
   },
   getters: {
     token: (state) => state.token,

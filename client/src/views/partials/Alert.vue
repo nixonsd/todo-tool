@@ -1,10 +1,6 @@
 <template>
   <div class="row">
-    <div class="card red white-text">
-      <div class="card-content">
-        <i class="material-icons left">error</i>{{ title }}
-      </div>
-    </div>
+    <i class="material-icons left">error</i>{{ title }}
   </div>
 </template>
 

@@ -4,11 +4,6 @@
       <h4>Sign Up</h4>
       <h6><router-link to="/login">/ Sign In</router-link></h6>
     </div>
-    <component
-      :is="ErrorProp"
-      :title="error.message"
-      v-if="error.id !== 'auth_succeed'"
-    />
     <div class="row">
       <form method="POST" @submit.prevent="onSubmit" novalidate>
         <div class="input-field">
@@ -79,12 +74,17 @@
           </div>
         </div>
       </form>
+      <component
+        class="red-text"
+        :is="ErrorProp"
+        :title="error.message"
+        v-if="error.id !== 'auth_succeed'"
+      />
       <!-- <div class="row">
         <div class="col s12 wrapper">
           <span>Or Sign Up with</span>
         </div>
       </div> -->
-      <div class="row"></div>
     </div>
   </div>
 </template>
@@ -94,13 +94,13 @@ import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import Error from "./partials/Error.vue";
+import Alert from "./partials/Alert.vue";
 
 export default {
-  components: { Error },
+  components: { Alert },
   setup() {
     // Variables
-    const ErrorProp = "Error";
+    const ErrorProp = "Alert";
     const error = { id: "auth_succeed", message: "OK" };
 
     // Initial values

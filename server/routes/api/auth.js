@@ -1,11 +1,34 @@
 const { Router } = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const sendinBlue = require("nodemailer-sendinblue-transport");
 const User = require("../../models/user");
+const restoreEmail = require("../../emails/restore");
 const auth = require("../../middleware/auth");
+const service = require("../../Google/service.json");
+const client = require("../../Google/client.json");
+const keys = require("../../keys");
 const router = Router();
 
 const AUTH_TOKEN_KEY = "sid";
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    // type: service.type,
+    type: "OAuth2",
+    user: keys.EMAIL_USER,
+    // serviceClient: service.client_id,
+    // privateKey: service.private_key,
+    scope : "https://www.googleapis.com/auth/gmail.send",
+    clientId: client.web.client_id,
+    clientSecret: client.web.client_secret,
+    refreshToken: keys.REFRESH_TOKEN,
+  },
+});
 
 /**
  * Login API Method api/auth/login
@@ -99,6 +122,35 @@ router.post("/register", async (req, res) => {
       data.id = "auth_succeed";
       data.status = 201;
       data.message = "OK";
+    }
+
+    res
+      .status(data.status)
+      .send(JSON.stringify({ id: data.id, message: data.message }));
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.post("/restore", async (req, res) => {
+  try {
+    let data = {
+      id: "restore_failed",
+      status: 404,
+      message: "Email is not found",
+    };
+
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (user) {
+      await transporter.verify();
+      await transporter.sendMail(restoreEmail(email, user));
+      restoreEmail(email, user);
+      data.id = "restore_succeed";
+      data.status = 200;
+      data.message =
+        "The recovery code has been sent to the specified email address";
     }
 
     res

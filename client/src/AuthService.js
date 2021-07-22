@@ -17,9 +17,7 @@ class AuthService {
   }
 
   static async logout() {
-    return await axios
-      .post(`${url}logout`)
-      .catch((err) => err.response);
+    return await axios.post(`${url}logout`).catch((err) => err.response);
   }
 
   static async register(object) {
@@ -29,6 +27,15 @@ class AuthService {
         name,
         email,
         password,
+      })
+      .catch((err) => err.response);
+  }
+
+  static async restoreRequest(object) {
+    const { email } = object;
+    return await axios
+      .post(`${url}restore`, {
+        email,
       })
       .catch((err) => err.response);
   }
