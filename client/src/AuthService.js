@@ -39,6 +39,15 @@ class AuthService {
       })
       .catch((err) => err.response);
   }
+
+  static async restorePassword(object) {
+    const { resetToken, password } = object;
+    return await axios
+      .post(`${url}restore/` + resetToken, {
+        password,
+      })
+      .catch((err) => err.response);
+  }
 }
 
 export default AuthService;

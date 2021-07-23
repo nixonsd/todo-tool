@@ -35,6 +35,13 @@ export default {
       } catch (err) {
         console.log(err.message);
       }
+    },
+    async restorePassword(_, payload) {
+      try {
+        return await AuthService.restorePassword(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   },
   getters: {

@@ -86,7 +86,6 @@ export default {
     },
     async onUpdateTitle(id, title) {
       try {
-        console.log(id, title);
         this.tasks[id].title = title;
         this.tasks[id].modifiedAt = new Date();
         await PostService.changeTask(this.tasks[id]);

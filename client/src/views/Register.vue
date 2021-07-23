@@ -168,13 +168,12 @@ export default {
       const { email, password } = values;
       const response = await store.dispatch("auth/register", values);
       const { status, data } = response;
-      if (status !== 200) {
+      if (status !== 201) {
         const { id, message } = data;
         error.id = id;
         error.message = message;
         return;
       }
-
       await store.dispatch("auth/login", { email, password });
       router.push("/");
     });
