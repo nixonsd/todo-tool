@@ -17,8 +17,9 @@
             :completed="task.completed"
             :createdAt="new Date(task.createdAt)"
             :modifiedAt="new Date(task.modifiedAt)"
-            @task-completed="completeTask(index)"
-            @task-delete="deleteTask(index)"
+            @taskCompleted="completeTask(index)"
+            @taskDelete="deleteTask(index)"
+            @updateTitle="onUpdateTitle(index, $event)"
           />
         </div>
       </div>
@@ -78,6 +79,15 @@ export default {
       try {
         this.tasks[id].modifiedAt = new Date();
         this.tasks[id].completed = !this.tasks[id].completed;
+        await PostService.changeTask(this.tasks[id]);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async onUpdateTitle(id, title) {
+      try {
+        this.tasks[id].title = title;
+        this.tasks[id].modifiedAt = new Date();
         await PostService.changeTask(this.tasks[id]);
       } catch (err) {
         console.error(err);

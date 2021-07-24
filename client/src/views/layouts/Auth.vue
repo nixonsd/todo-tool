@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="red darken-1 auth-container">
-      <div class="container">
+      <div class="container container-bar">
         <div class="row">
           <router-link to="/" class="brand-logo image-logo white-text">
             <img class="responsive-img" src="@/assets/logo.svg" alt="Logo" />
@@ -31,6 +31,7 @@ export default {};
   position: absolute;
   width: 100%;
   height: 100%;
+  padding: 1rem 0;
 
   /* FlexBox */
   display: flex;
@@ -53,6 +54,10 @@ export default {};
   .text-logo {
     font-size: 1.5rem;
   }
+}
+
+.container-bar {
+  padding: 2rem 0;
 }
 
 .cursor {

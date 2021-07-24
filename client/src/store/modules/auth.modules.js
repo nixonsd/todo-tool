@@ -10,18 +10,39 @@ export default {
   actions: {
     async login(_, payload) {
       try {
-        await AuthService.login(payload);
+        return await AuthService.login(payload);
       } catch (err) {
         console.log(err.message);
       }
     },
     async logout() {
       try {
-        await AuthService.logout();
+        return await AuthService.logout();
       } catch (err) {
         console.log(err.message);
       }
     },
+    async register(_, payload) {
+      try {
+        return await AuthService.register(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+    async restoreRequest(_, payload) {
+      try {
+        return await AuthService.restoreRequest(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+    async restorePassword(_, payload) {
+      try {
+        return await AuthService.restorePassword(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
   },
   getters: {
     token: (state) => state.token,

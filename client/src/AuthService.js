@@ -11,15 +11,42 @@ class AuthService {
       .post(`${url}login`, {
         email,
         password,
-        remember
+        remember,
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => err.response);
   }
 
   static async logout() {
+    return await axios.post(`${url}logout`).catch((err) => err.response);
+  }
+
+  static async register(object) {
+    const { name, email, password } = object;
     return await axios
-      .post(`${url}logout`)
-      .catch((err) => console.log(err.message));
+      .post(`${url}register`, {
+        name,
+        email,
+        password,
+      })
+      .catch((err) => err.response);
+  }
+
+  static async restoreRequest(object) {
+    const { email } = object;
+    return await axios
+      .post(`${url}restore`, {
+        email,
+      })
+      .catch((err) => err.response);
+  }
+
+  static async restorePassword(object) {
+    const { resetToken, password } = object;
+    return await axios
+      .post(`${url}restore/` + resetToken, {
+        password,
+      })
+      .catch((err) => err.response);
   }
 }
 

@@ -6,13 +6,28 @@
           <div class="col s10" style="white-space: pre-wrap;">
             <label>
               <input
-                @change="$emit('task-completed')"
+                @change="$emit('taskCompleted')"
                 type="checkbox"
                 class="filled-in"
                 :checked="completed"
               />
               <span>
-                <p class="task-title" :class="isCheckedStyle">{{ title }}</p>
+                <p class="task-title" :class="isCheckedStyle" v-if="!isActive">
+                  {{ title }}
+                </p>
+                <form @submit.prevent="onSubmit" v-else>
+                  <div class="input-field">
+                    <input
+                      id="task-title"
+                      class="task-title"
+                      ref="task-title"
+                      :value="title"
+                      placeholder="Edit your task..."
+                      @blur="isActive = false"
+                    />
+                    <label for="task-title" class="task-label">Edit Task</label>
+                  </div>
+                </form>
                 <p class="task-date">
                   Created: {{ getFormatedDate(createdAt) }} (Modified:
                   {{ getFormatedDate(modifiedAt) }})
@@ -24,11 +39,22 @@
             <i
               class="right material-icons task-option"
               style="color: red; cursor: pointer;"
-              @click="$emit('task-delete')"
+              @click="$emit('taskDelete')"
               >close</i
             >
-            <i class="right material-icons task-option" style="cursor: pointer;"
+            <i
+              class="right material-icons task-option"
+              style="cursor: pointer;"
+              @click.prevent="onEditClick"
+              v-if="!isActive"
               >edit</i
+            >
+            <i
+              class="right material-icons task-option green-text"
+              style="cursor: pointer;"
+              @mousedown="onSubmit"
+              v-else
+              >check</i
             >
           </div>
         </div>
@@ -38,8 +64,17 @@
 </template>
 
 <script>
+import M from "materialize-css";
+
 export default {
-  emit: ["task-completed", "task-delete"],
+  data: () => ({
+    isActive: false,
+  }),
+  emit: {
+    taskCompleted: null,
+    taskDelete: null,
+    updateTitle: null,
+  },
   props: {
     title: { type: String, required: true },
     completed: { type: Boolean, required: true },
@@ -63,6 +98,19 @@ export default {
         hour12: false,
       }).format(date);
     },
+    onEditClick() {
+      this.isActive = true;
+      M.updateTextFields();
+      this.$nextTick(() => {
+        if (this.isActive) this.$refs["task-title"].focus();
+      });
+    },
+    onSubmit() {
+      const value = this.$refs["task-title"].value;
+      if (value === this.title || value.length < 1) return;
+      this.$emit("updateTitle", value);
+      this.isActive = false;
+    },
   },
 };
 </script>
@@ -73,6 +121,20 @@ export default {
   font-size: 1.5rem;
   padding-bottom: 0.2rem;
   overflow-wrap: anywhere;
+}
+
+.btn-option {
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.task-label {
+  font-size: 0.8rem;
+  top: -2rem;
 }
 
 .task-title.crossed-title {
