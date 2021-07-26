@@ -7,8 +7,8 @@ const sendinBlue = require("nodemailer-sendinblue-transport");
 const User = require("../../models/user");
 const restoreEmail = require("../../emails/restore");
 const auth = require("../../middleware/auth");
-const service = require("../../Google/service.json");
-const client = require("../../Google/client.json");
+const service = require("../../../Google/service.json");
+const client = require("../../../Google/client.json");
 const keys = require("../../keys");
 const router = Router();
 

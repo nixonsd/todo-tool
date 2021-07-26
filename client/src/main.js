@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import GoogleAuth from "vue3-google-oauth2";
-import client from "../../server/Google/client.json";
+import client from "../../Google/client.json";
 
 import "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
