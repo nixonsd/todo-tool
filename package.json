@@ -35,6 +35,7 @@
     "nodemailer-sendinblue-transport": "^1.2.3",
     "vee-validate": "^4.4.6",
     "vue-cookies": "^1.7.4",
+    "vue-github-button": "^3.0.1",
     "vue-router": "^4.0.10",
     "vue3-google-oauth2": "^1.0.4",
     "vuex": "^4.0.2",
