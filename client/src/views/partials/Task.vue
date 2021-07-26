@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card">
+    <div class="card hoverable">
       <div class="card-content">
         <div class="row fixed-row">
           <div class="col s10" style="white-space: pre-wrap;">
@@ -10,6 +10,7 @@
                 type="checkbox"
                 class="filled-in"
                 :checked="completed"
+                :disabled="isActive"
               />
               <span>
                 <p class="task-title" :class="isCheckedStyle" v-if="!isActive">

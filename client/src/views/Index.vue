@@ -33,6 +33,7 @@
 import PostService from "../PostService";
 import AddForm from "./partials/AddForm.vue";
 import Task from "./partials/Task.vue";
+import $ from "jquery";
 
 export default {
   components: { "app-task": Task, AddForm },
@@ -44,7 +45,12 @@ export default {
   async created() {
     try {
       this.tasks = await PostService.getTasks();
-      this.loader = false;
+      setTimeout(() => {
+        $(".app-loader")
+          .fadeOut()
+          .delay("slow");
+        this.loader = false;
+      }, 500);
     } catch (err) {
       console.log(err);
     }

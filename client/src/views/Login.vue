@@ -65,7 +65,7 @@
           </div>
         </div>
         <div class="row">
-          <google-auth class="col s12"/>
+          <google-auth class="col s12" />
         </div>
       </form>
       <component
@@ -130,15 +130,19 @@ export default {
     const { value: remember } = useField("remember", yup.boolean());
 
     const onSubmit = handleSubmit(async (values) => {
-      const response = await store.dispatch("auth/login", values);
-      const { status, data } = response;
-      if (status !== 200) {
-        const { id, message } = data;
-        error.id = id;
-        error.message = message;
-        return;
+      try {
+        const response = await store.dispatch("auth/login", values);
+        const { status, data } = response;
+        if (status !== 200) {
+          const { id, message } = data;
+          error.id = id;
+          error.message = message;
+          return;
+        }
+        router.push("/");
+      } catch (e) {
+        console.log(e);
       }
-      router.push("/");
     });
 
     return {
