@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="red darken-1 auth-container">
+    <div class="backgorund-container red darken-1"></div>
+    <div class="auth-container">
       <div class="container container-bar">
         <div class="row">
           <router-link to="/" class="brand-logo image-logo white-text">
@@ -26,6 +27,12 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.backgorund-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
 .auth-container {
   /* Position */
   position: absolute;
@@ -57,7 +64,7 @@ export default {};
 }
 
 .container-bar {
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 
 .cursor {

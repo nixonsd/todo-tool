@@ -16,6 +16,12 @@ class AuthService {
       .catch((err) => err.response);
   }
 
+  static async googleOAuth(object) {
+    return await axios
+      .post(`${url}login/google`, object)
+      .catch((err) => err.response);
+  }
+
   static async logout() {
     return await axios.post(`${url}logout`).catch((err) => err.response);
   }

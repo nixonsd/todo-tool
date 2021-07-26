@@ -125,15 +125,20 @@ export default {
     );
 
     const onSubmit = handleSubmit(async ({ password }) => {
-      const response = await store.dispatch("auth/restorePassword", {
-        resetToken: route.params.resetToken,
-        password,
-      });
-      const { data } = response;
-      const { id, message } = data;
-      error.id = id;
-      error.message = message;
-      router.push("/");
+      try {
+        const response = await store.dispatch("auth/restorePassword", {
+          resetToken: route.params.resetToken,
+          password,
+        });
+        const { status, data } = response;
+        if (status !== 200) {
+          const { id, message } = data;
+          error.id = id;
+          error.message = message;
+        } else router.push("/");
+      } catch (e) {
+        console.log(e);
+      }
     });
 
     return {

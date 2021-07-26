@@ -42,7 +42,14 @@ export default {
       } catch (err) {
         console.log(err.message);
       }
-    }
+    },
+    async googleOAuth(_, payload) {
+      try {
+        return await AuthService.googleOAuth(payload);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {
     token: (state) => state.token,

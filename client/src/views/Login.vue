@@ -59,38 +59,39 @@
             <router-link to="/restore">Forgot password?</router-link>
           </div>
         </div>
+        <div class="row col s12">
+          <div class="wrapper">
+            <span>Or Sign In With</span>
+          </div>
+        </div>
+        <div class="row">
+          <google-auth class="col s12"/>
+        </div>
       </form>
       <component
         class="red-text"
         :is="ErrorProp"
         :title="error.message"
-        v-if="error.id !== 'auth_succeed'"
+        v-show="error.id !== 'auth_succeed'"
       />
-      <!-- <div class="row">
-        <div class="col s12 wrapper">
-          <span>Or Sign In with</span>
-        </div>
-        <div class="col s12">
-          
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
-
 <script>
 import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import Alert from "./partials/Alert.vue";
+import GoogleAuth from "./partials/GoogleAuth.vue";
 
 export default {
-  components: { Alert },
+  components: { Alert, "google-auth": GoogleAuth },
+  methods: {},
   setup() {
     // Variables
     const ErrorProp = "Alert";
-    const error = { id: "auth_succeed", message: "OK" };
+    let error = { id: "auth_succeed", message: "OK" };
 
     // Initial values
     const formValues = {
@@ -163,9 +164,8 @@ export default {
 }
 
 .wrapper {
-  background-color: gray;
+  background-color: #ddd;
   height: 1px;
-  margin: 32px 0 0;
   text-align: center;
 
   span {
@@ -173,7 +173,7 @@ export default {
     padding: 0 2rem;
     top: -0.9rem;
     font-size: 1.1rem;
-    color: gray;
+    color: #b6b6b6;
     background: #ffffff;
   }
 }
