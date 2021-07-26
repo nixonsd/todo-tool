@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div class="backgorund-container red darken-1"></div>
-    <div class="auth-container">
+    <app-loader class="app-loader white" />
+    <div class="backgorund-container red darken-1" v-cloak></div>
+    <div class="auth-container" v-cloak>
       <div class="container container-bar">
         <div class="row">
           <router-link to="/" class="brand-logo image-logo white-text">
@@ -23,10 +24,40 @@
 </template>
 
 <script>
-export default {};
+import $ from "jquery";
+
+export default {
+  mounted: () => {
+    setTimeout(() => {
+      $(".app-loader").fadeOut().delay("slow");
+    }, 1000);
+  },
+
+  data: () => ({}),
+};
 </script>
 
 <style lang="scss" scoped>
+[v-cloak] {
+  display: none;
+}
+
+.app-loader {
+  /* Position Set */
+  top: 0;
+  left: 0;
+  content: "";
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+
+  /* FlexBox */
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+}
+
 .backgorund-container {
   position: fixed;
   width: 100%;
