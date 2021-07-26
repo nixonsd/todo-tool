@@ -7,7 +7,7 @@
       lists, available with internal or external authorization. Just sign in to
       your account, add a new task, modify it whether you want, check it and
       delete it.
-      <a href="https://github.com/nixonsd/todo-tool#todo-tool">README</a>
+      <a href="https://github.com/nixonsd/todo-tool#readme">README</a>
     </p>
 
     <h3>
