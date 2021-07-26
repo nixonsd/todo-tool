@@ -33,13 +33,17 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store,
+    cookie: {
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
+      secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+    },
   })
 );
 
 app.use(
   cors({
     origin: ["http://localhost:8081", "https://localhost:8081"],
-    credentials: true
+    credentials: true,
   })
 );
 

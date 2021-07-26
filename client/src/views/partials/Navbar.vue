@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     async logout() {
+      this.$gAuth.signOut();
       await this.store.dispatch("auth/logout");
       this.router.push("/login");
     },

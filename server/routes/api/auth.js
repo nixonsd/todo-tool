@@ -39,6 +39,8 @@ const transporter = nodemailer.createTransport({
  */
 router.post("/login", async (req, res) => {
   try {
+    // Type
+    const type = "default";
     // Fill first response data
     let data = {
       id: "auth_failed",
@@ -47,7 +49,7 @@ router.post("/login", async (req, res) => {
     };
     // Get user by email
     const { email, password, remember } = req.body;
-    const candidate = await User.findOne({ email });
+    const candidate = await User.findOne({ type, email });
     // If user exists then go through
     if (candidate) {
       // Check wether passwords are same
@@ -82,6 +84,72 @@ router.post("/login", async (req, res) => {
         };
       }
     }
+    // Send Response
+    res
+      .status(data.status)
+      .send(JSON.stringify({ id: data.id, message: data.message }));
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+/**
+ * Login Google OAuth2 API Method api/auth/login
+ * * req.body { loginType: String, google: OAuth2Obj }
+ * @param req.body An object that consists of authorization data
+ */
+router.post("/login/google", async (req, res) => {
+  try {
+    // Fill first response data
+    let data = {
+      id: "auth_failed",
+      status: 404,
+      message: "Wrong login and/or password",
+    };
+    const { loginType, google } = req.body;
+    const { OAuth2Client } = require("google-auth-library");
+    const _client = new OAuth2Client(client.web.client_id);
+    const ticket = await _client.verifyIdToken({
+      idToken: google.Zb.id_token,
+      audience: client.web.client_id,
+    });
+    const payload = ticket.getPayload();
+    let email = payload["email"];
+    let name = payload["name"];
+
+    let candidate = await User.findOne({ type: loginType, email });
+    if (!candidate) {
+      const hash = await crypto.randomBytes(32);
+      const user = new User({
+        type: loginType,
+        name,
+        password: hash.toString("hex"),
+        email,
+      });
+      candidate = user;
+      // Save user
+      await user.save();
+    }
+
+    // Long session
+    req.session.cookie.maxAge = 31 * 24 * 60 * 60 * 1000;
+    res.cookie(AUTH_TOKEN_KEY, req.session.id, {
+      maxAge: 31 * 24 * 60 * 60 * 1000,
+    });
+    // Session options
+    req.session.user = { _id: candidate._id };
+    req.session.isAuthenticated = true;
+    req.session.save((err) => {
+      if (err) {
+        throw err;
+      }
+    });
+    /// Send data to front-end
+    data = {
+      id: "auth_succeed",
+      status: 200,
+      message: req.session.id,
+    };
     // Send Response
     res
       .status(data.status)
@@ -127,6 +195,7 @@ router.post("/register", async (req, res) => {
       /// Fill user data
       const hashPassword = await bcrypt.hash(password, 10);
       const user = new User({
+        type: "default",
         name,
         email,
         password: hashPassword,
@@ -166,7 +235,7 @@ router.post("/restore", (req, res) => {
 
       // Get user by email
       const { email } = req.body;
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ type: "default", email });
 
       if (user) {
         if (!err) {
@@ -204,6 +273,8 @@ router.post("/restore", (req, res) => {
 
 router.post("/restore/:resetToken", async (req, res) => {
   try {
+    // Type
+    const type = "default";
     // Fill first response data
     let data = {
       id: "restore_failed",
@@ -214,7 +285,7 @@ router.post("/restore/:resetToken", async (req, res) => {
     const resetToken = req.params.resetToken;
     const { password } = req.body;
     // Check whether reset token is exsisted and not expired
-    const user = await User.findOne({ resetToken });
+    const user = await User.findOne({ type, resetToken });
     if (user) {
       if (user.resetTokenExp > Date.now()) {
         // Change user password
