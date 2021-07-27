@@ -3,8 +3,9 @@ module.exports = {
   SESSION_SECRET: "some secret value",
   BASE_URL: "http://localhost:8081",
   PORT: 3000,
-  EMAIL_USER: "buynet21@gmail.com",
-  EMAIL_FROM: "TodoTool",
-  REFRESH_TOKEN:
-    "1//04YMegTfbjtNuCgYIARAAGAQSNwF-L9IrCdcYvwKg8gi0VGlZkLdRpOZyBd6VYA4a3A0QrQvC8nC6HZ38Hcehx-9anr67NTXD6bE",
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  REFRESH_TOKEN: process.env.REFRESH_TOKEN,
 };

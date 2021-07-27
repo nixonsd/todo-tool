@@ -7,8 +7,6 @@ const sendinBlue = require("nodemailer-sendinblue-transport");
 const User = require("../../models/user");
 const restoreEmail = require("../../emails/restore");
 const auth = require("../../middleware/auth");
-const service = require("../../../Google/service.json");
-const client = require("../../../Google/client.json");
 const keys = require("../../keys");
 const router = Router();
 
@@ -25,8 +23,8 @@ const transporter = nodemailer.createTransport({
     // serviceClient: service.client_id,
     // privateKey: service.private_key,
     scope: "https://www.googleapis.com/auth/gmail.send",
-    clientId: client.web.client_id,
-    clientSecret: client.web.client_secret,
+    clientId: keys.CLIENT_ID,
+    clientSecret: keys.CLIENT_SECRET,
     refreshToken: keys.REFRESH_TOKEN,
   },
 });
@@ -108,10 +106,10 @@ router.post("/login/google", async (req, res) => {
     };
     const { loginType, google } = req.body;
     const { OAuth2Client } = require("google-auth-library");
-    const _client = new OAuth2Client(client.web.client_id);
+    const _client = new OAuth2Client(keys.CLIENT_ID);
     const ticket = await _client.verifyIdToken({
       idToken: google.Zb.id_token,
-      audience: client.web.client_id,
+      audience: keys.CLIENT_ID,
     });
     const payload = ticket.getPayload();
     let email = payload["email"];

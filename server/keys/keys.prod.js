@@ -5,5 +5,7 @@ module.exports = {
   PORT: process.env.PORT | 3000,
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_FROM: process.env.EMAIL_FROM,
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
   REFRESH_TOKEN: process.env.REFRESH_TOKEN,
 };

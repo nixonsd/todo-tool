@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "api/tasks/";
+const url = "/api/tasks/";
 
 axios.defaults.withCredentials = true;
 

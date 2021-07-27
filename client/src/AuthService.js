@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "api/auth/";
+const url = "/api/auth/";
 
 axios.defaults.withCredentials = true;
 
@@ -49,7 +49,7 @@ class AuthService {
   static async restorePassword(object) {
     const { resetToken, password } = object;
     return await axios
-      .post(`${url}restore/` + resetToken, {
+      .post(`${url}restore/${resetToken}`, {
         password,
       })
       .catch((err) => err.response);

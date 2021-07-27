@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import GoogleAuth from "vue3-google-oauth2";
-import client from "../../Google/client.json";
 
 import "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
@@ -14,7 +13,7 @@ app.use(router);
 app.use(store);
 
 app.use(GoogleAuth, {
-  clientId: client.web.client_id,
+  clientId: process.env.VUE_APP_CLIENT_ID,
   scope: "email",
   prompt: "consent",
   fetch_basic_profile: false,
