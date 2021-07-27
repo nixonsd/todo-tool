@@ -40,7 +40,7 @@ export default {
   data: () => ({
     loader: true,
     component: "AddForm",
-    tasks: { type: Array, required: true, default() { return [] } },
+    tasks: [],
   }),
   async created() {
     try {
