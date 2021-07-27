@@ -17,6 +17,8 @@ const User = require("./models/user");
 
 /// Express Initializing
 const app = express();
+app.set('trust proxy', 1);
+
 const store = new MongoStore({
   collection: "sessions",
   uri: keys.MONGODB_URI,
@@ -38,6 +40,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store,
+    proxy: process.env.NODE_ENV === "production",
     cookie: {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // must be 'none' to enable cross-site delivery
       secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
