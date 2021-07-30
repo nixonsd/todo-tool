@@ -14,7 +14,8 @@ const AUTH_TOKEN_KEY = "sid";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
+  service: "gmail",
+  port: 587,
   secure: true,
   auth: {
     // type: service.type,
