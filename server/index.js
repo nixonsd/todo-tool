@@ -3,22 +3,19 @@ const cookieParser = require("cookie-parser");
 const history = require("connect-history-api-fallback");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const path = require("path");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
+const compression = require('compression');
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
 const keys = require("./keys");
 
-/// Models
-const User = require("./models/user");
-
 /// Express Initializing
 const app = express();
 app.use(history());
+app.use(compression());
 app.set("trust proxy", 1);
 
 if (process.env.NODE_ENV === "production") {
@@ -55,11 +52,7 @@ app.use(
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:8081",
-      "https://localhost:8081",
-      "https://localhost:3000",
-    ],
+    origin: ["http://localhost:8081", "https://localhost:8081"],
     credentials: true,
   })
 );

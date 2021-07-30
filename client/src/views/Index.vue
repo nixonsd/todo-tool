@@ -45,7 +45,6 @@ export default {
   async created() {
     try {
       this.tasks = await PostService.getTasks();
-      console.log(this.tasks);
       setTimeout(() => {
         $(".app-loader")
           .fadeOut()
