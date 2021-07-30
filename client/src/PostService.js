@@ -3,6 +3,7 @@ import axios from "axios";
 const url = "/api/tasks/";
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "/";
 
 class PostService {
   /**

@@ -1,27 +1,35 @@
 <template>
   <div>
     <nav>
-      <div class="nav-wrapper red darken-1">
-        <router-link to="/" class="brand-logo image-logo">
-          <img class="responsive-img" src="@/assets/logo.svg" alt="Logo" />
-          <span class="cursor">┃</span>
-          <span>TodoTool</span>
-        </router-link>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"
-          ><i class="material-icons">menu</i></a
-        >
-        <ul class="right hide-on-med-and-down">
-          <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/about">About</router-link></li>
-          <li>
-            <a href="https://github.com/nixonsd/todo-tool"
-              ><i class="small material-icons left">insert_link</i>GitHub</a
-            >
-          </li>
-          <li>
-            <a class="sidenav-close" href="/" @click.prevent="logout">Logout</a>
-          </li>
-        </ul>
+      <div class="red darken-1 row">
+        <div class="col m10 s12 offset-m1">
+          <router-link to="/" class="brand-logo image-logo">
+            <img class="responsive-img" src="@/assets/logo.svg" alt="Logo" />
+            <span class="cursor">┃</span>
+            <span>TodoTool</span>
+          </router-link>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"
+            ><i class="material-icons">menu</i></a
+          >
+          <ul class="right hide-on-med-and-down">
+            <li><router-link to="/">Home</router-link></li>
+            <li><router-link to="/about">About</router-link></li>
+            <li>
+              <a href="https://github.com/nixonsd/todo-tool"
+                >GitHub<i
+                  class="material-icons right"
+                  style="margin-top: .3rem;"
+                  >insert_link</i
+                ></a
+              >
+            </li>
+            <li>
+              <a class="sidenav-close" href="/" @click.prevent="logout"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
 
       <ul class="sidenav" id="mobile-demo">
@@ -38,7 +46,7 @@
         <li><a class="subheader">Links</a></li>
         <li>
           <a class="sidenav-close" href="https://github.com/nixonsd/todo-tool"
-            ><i class="small material-icons left">insert_link</i>GitHub</a
+            ><i class="material-icons left">insert_link</i>GitHub</a
           >
         </li>
       </ul>

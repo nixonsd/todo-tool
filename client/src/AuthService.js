@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const url = "api/auth/";
-
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "/";
 
 class AuthService {
   static async login(object) {
