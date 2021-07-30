@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const history = require("connect-history-api-fallback");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
@@ -17,18 +18,22 @@ const User = require("./models/user");
 
 /// Express Initializing
 const app = express();
-app.set('trust proxy', 1);
+app.use(history());
+app.set("trust proxy", 1);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(__dirname + "/public/"));
+  app.get("*", (req, res, next) => {
+    if (req.path.match(/^\/api\/.*$/)) next();
+    else res.sendFile(__dirname + "/public/index.html");
+  });
+}
 
 const store = new MongoStore({
   collection: "sessions",
   uri: keys.MONGODB_URI,
 });
 app.use(express.urlencoded({ extended: true }));
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(__dirname + "/public/"));
-  app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
-}
 
 /// Middlewares
 app.use(bodyParser.json());
@@ -50,7 +55,11 @@ app.use(
 
 app.use(
   cors({
-    origin: ["http://localhost:8081", "https://localhost:8081"],
+    origin: [
+      "http://localhost:8081",
+      "https://localhost:8081",
+      "https://localhost:3000",
+    ],
     credentials: true,
   })
 );

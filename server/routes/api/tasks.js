@@ -6,7 +6,8 @@ const router = Router();
 router.get("/", auth, async (req, res) => {
   try {
     const user = await req.user;
-    res.send([...user.tasks]);
+    res.setHeader('content-type', 'application/json');
+    res.send(JSON.stringify([...user.tasks]));
   } catch (err) {
     return console.log(err.message);
   }
@@ -24,7 +25,8 @@ router.post("/", auth, async (req, res) => {
     };
     user.tasks.push(task);
     await user.save();
-    res.status(201).send(task);
+    res.setHeader('content-type', 'application/json');
+    res.status(201).send(JSON.stringify(task));
   } catch (err) {
     return console.log(err.message);
   }

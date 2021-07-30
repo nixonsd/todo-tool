@@ -8,7 +8,7 @@ import Restore from "./views/Restore.vue";
 import Reset from "./views/Reset.vue";
 
 // Default title
-const DEFAULT_TITLE = "Some Default Title";
+const DEFAULT_TITLE = "TodoTool";
 
 const router = createRouter({
   history: createWebHistory(),
