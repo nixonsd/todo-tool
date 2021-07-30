@@ -27,6 +27,9 @@ const transporter = nodemailer.createTransport({
     clientSecret: keys.CLIENT_SECRET,
     refreshToken: keys.REFRESH_TOKEN,
   },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 /**
