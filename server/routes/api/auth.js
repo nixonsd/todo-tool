@@ -14,7 +14,7 @@ const AUTH_TOKEN_KEY = "sid";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
+  port: process.env.NODE_ENV === 'production' ? 587 : 465,
   secure: true,
   auth: {
     // type: service.type,
