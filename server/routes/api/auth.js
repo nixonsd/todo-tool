@@ -183,6 +183,8 @@ router.post("/logout", async (req, res) => {
  */
 router.post("/register", async (req, res) => {
   try {
+    // Type
+    const type = "default";
     // Fill first response data
     let data = {
       id: "auth_failed",
@@ -192,7 +194,7 @@ router.post("/register", async (req, res) => {
     // Get user info
     const { email, password, name } = req.body;
     // Check whether email is exsisted
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ type, email });
     if (!user) {
       /// Fill user data
       const hashPassword = await bcrypt.hash(password, 10);
@@ -228,6 +230,8 @@ router.post("/register", async (req, res) => {
 router.post("/restore", (req, res) => {
   crypto.randomBytes(32, async (err, buffer) => {
     try {
+      // Type
+      const type = "default";
       // Fill first response data
       let data = {
         id: "restore_failed",
@@ -237,7 +241,7 @@ router.post("/restore", (req, res) => {
 
       // Get user by email
       const { email } = req.body;
-      const user = await User.findOne({ type: "default", email });
+      const user = await User.findOne({ type, email });
 
       if (user) {
         if (!err) {
