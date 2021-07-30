@@ -7,10 +7,6 @@
     "start": "node server/index.js",
     "dev": "nodemon server/index.js"
   },
-  "engines": {
-    "node": "7.10.0",
-    "npm": "4.2.0"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-history-api-fallback": "^1.6.0",
     "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
