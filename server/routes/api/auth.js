@@ -14,12 +14,13 @@ const AUTH_TOKEN_KEY = "sid";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: process.env.NODE_ENV === 'production' ? 587 : 465,
+  port: 465,
   secure: true,
   auth: {
     // type: service.type,
     type: "OAuth2",
     user: keys.EMAIL_USER,
+    password: keys.EMAIL_PASSWORD,
     // serviceClient: service.client_id,
     // privateKey: service.private_key,
     scope: "https://www.googleapis.com/auth/gmail.send",

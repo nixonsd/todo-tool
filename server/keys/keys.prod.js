@@ -4,6 +4,7 @@ module.exports = {
   BASE_URL: process.env.BASE_URL,
   PORT: process.env.PORT,
   EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   EMAIL_FROM: process.env.EMAIL_FROM,
   CLIENT_ID: process.env.CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET,
