@@ -1,5 +1,7 @@
 # TodoTool
-Web application [TodoTool]() is open-source project that designed for portfolios. TodoTool is a simple to-do list that allows you to conveniently create, modify and compose your own lists, available with internal or external authorization. Just sign in to your account, add a new task, modify it whether you want, check it and delete it.
+Web application [TodoTool](https://todo-tool.herokuapp.com/) is open-source project that designed for portfolios. TodoTool is a simple to-do list that allows you to conveniently create, modify and compose your own lists, available with internal or external authorization. Just sign in to your account, add a new task, modify it whether you want, check it and delete it.
+
+![GitHub issues](https://img.shields.io/github/issues/nixonsd/todo-tool?logo=GitHub) [![GitHub stars](https://img.shields.io/github/stars/nixonsd/todo-tool)](https://github.com/nixonsd/todo-tool/stargazers) [![GitHub license](https://img.shields.io/github/license/nixonsd/todo-tool?label=license)](https://github.com/nixonsd/todo-tool)
 
 # Installation
 1. Install dependencies `npm install --save`
